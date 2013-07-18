@@ -26,9 +26,9 @@ def gpio_callback(channel, val):
 	if(val == 0):
 		return
 
-	print 'Edge detected on channel {0}, mapped to action "{1}".'.format(channel, action)
-
 	action = keymap[channel]
+
+	print 'Edge detected on channel {0}, mapped to action "{1}".'.format(channel, action)
 
 	if(action == "play"):
 		client.play()
