@@ -1,5 +1,5 @@
 from mpd import MPDClient
-import 	RPi.GPIO as GPIO
+import 	RPIO
 
 ip_addr = "127.0.0.1"
 port = 6600;
@@ -12,7 +12,11 @@ print("Connecting.. ")
 client.connect(ip_addr, port)
 print("Connected to " + ip_addr + ":" + str(port))
 
-def gpio_callback(channel):
+def gpio_callback(channel, val):
+
+	if(val == 0):
+		return
+
 	print("Edge detected on channel %s."%channel)
 	if(channel == 16):
 		client.play()
@@ -21,23 +25,23 @@ def gpio_callback(channel):
 	elif(channel == 13):
 		client.next()
 	elif(channel == 18):
-			client.previous()
+		client.previous()
 
-GPIO.setmode(GPIO.BOARD)
+RPIO.setmode(RPIO.BOARD)
 
-GPIO.setup(16, GPIO.IN) # Switch 1
-GPIO.setup(15, GPIO.IN) # Switch 2
-GPIO.setup(13, GPIO.IN) # Switch 3
-GPIO.setup(18, GPIO.IN) # Switch 4
-GPIO.setup(22, GPIO.IN) # Switch 5
-GPIO.setup(11, GPIO.IN) # Switch 6
+RPIO.setup(16, RPIO.IN) # Switch 1
+RPIO.setup(15, RPIO.IN) # Switch 2
+RPIO.setup(13, RPIO.IN) # Switch 3
+RPIO.setup(18, RPIO.IN) # Switch 4
+RPIO.setup(22, RPIO.IN) # Switch 5
+RPIO.setup(11, RPIO.IN) # Switch 6
 
-GPIO.add_event_detect(16, GPIO.RISING, callback=gpio_callback, bouncetime=500)
-GPIO.add_event_detect(15, GPIO.RISING, callback=gpio_callback, bouncetime=500)
-GPIO.add_event_detect(13, GPIO.RISING, callback=gpio_callback, bouncetime=500)
-GPIO.add_event_detect(18, GPIO.RISING, callback=gpio_callback, bouncetime=500)
-GPIO.add_event_detect(22, GPIO.RISING, callback=gpio_callback, bouncetime=500)
-GPIO.add_event_detect(11, GPIO.RISING, callback=gpio_callback, bouncetime=500)
+RPIO.add_interrupt_callback(16, gpio_callback, edge='rising', debounce_timeout_ms=200)
+RPIO.add_interrupt_callback(15, gpio_callback, edge='rising', debounce_timeout_ms=200)
+RPIO.add_interrupt_callback(13, gpio_callback, edge='rising', debounce_timeout_ms=200)
+RPIO.add_interrupt_callback(18, gpio_callback, edge='rising', debounce_timeout_ms=200)
+RPIO.add_interrupt_callback(22, gpio_callback, edge='rising', debounce_timeout_ms=200)
+RPIO.add_interrupt_callback(11, gpio_callback, edge='rising', debounce_timeout_ms=200)
 
 # GPIO.add_event_callback(16, gpio_callback)
 # GPIO.add_event_callback(15, gpio_callback)
@@ -46,8 +50,8 @@ GPIO.add_event_detect(11, GPIO.RISING, callback=gpio_callback, bouncetime=500)
 # GPIO.add_event_callback(22, gpio_callback)
 # GPIO.add_event_callback(11, gpio_callback)
 
-raw_input("Press enter to stop.")
+RPIO.wait_for_interrupts()
 
-GPIO.cleanup()
+RPIO.cleanup()
 client.close()
 client.disconnect()
