@@ -24,7 +24,7 @@ except RuntimeError:
 def gpio_callback(channel):
 	print("Edge detected on channel %s."%channel)
 
-GPIO.setMode(GPIO.BOARD)
+GPIO.setmode(GPIO.BOARD)
 
 GPIO.setup(16, GPIO.IN) # Switch 1
 GPIO.setup(15, GPIO.IN) # Switch 2
@@ -47,3 +47,5 @@ GPIO.add_event_callback(18, gpio_callback)
 GPIO.add_event_callback(22, gpio_callback)
 GPIO.add_event_callback(11, gpio_callback)
 
+GPIO.wait_for_interrupts()
+GPIO.cleanup()
