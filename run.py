@@ -8,6 +8,15 @@ client = MPDClient()
 client.timeout = 10
 client.idletimeout = None
 
+keymap = {
+	23: 'play',
+	22: 'pause',
+	27: 'next',
+	24: 'prev',
+	25: 'unmapped1',
+	17: 'none' 
+}
+
 print("Connecting.. ")
 client.connect(ip_addr, port)
 print("Connected to " + ip_addr + ":" + str(port))
@@ -17,38 +26,24 @@ def gpio_callback(channel, val):
 	if(val == 0):
 		return
 
-	print("Edge detected on channel %s."%channel)
-	if(channel == 16):
+	print 'Edge detected on channel {0}, mapped to action "{1}".'.format(channel, action)
+
+	action = keymap[channel]
+
+	if(action == "play"):
 		client.play()
-	elif(channel == 15):
+	elif(action == "pause"):
 		client.pause()
-	elif(channel == 13):
+	elif(action == "next"):
 		client.next()
-	elif(channel == 18):
+	elif(action == "previous"):
 		client.previous()
 
 # RPIO.setmode(RPIO.BOARD)
 
-RPIO.setup(23, RPIO.IN) # Switch 1
-RPIO.setup(22, RPIO.IN) # Switch 2
-RPIO.setup(27, RPIO.IN) # Switch 3
-RPIO.setup(24, RPIO.IN) # Switch 4
-RPIO.setup(25, RPIO.IN) # Switch 5
-RPIO.setup(17, RPIO.IN) # Switch 6
-
-RPIO.add_interrupt_callback(23, gpio_callback, edge='rising', debounce_timeout_ms=200)
-RPIO.add_interrupt_callback(22, gpio_callback, edge='rising', debounce_timeout_ms=200)
-RPIO.add_interrupt_callback(27, gpio_callback, edge='rising', debounce_timeout_ms=200)
-RPIO.add_interrupt_callback(24, gpio_callback, edge='rising', debounce_timeout_ms=200)
-RPIO.add_interrupt_callback(25, gpio_callback, edge='rising', debounce_timeout_ms=200)
-RPIO.add_interrupt_callback(17, gpio_callback, edge='rising', debounce_timeout_ms=200)
-
-# GPIO.add_event_callback(16, gpio_callback)
-# GPIO.add_event_callback(15, gpio_callback)
-# GPIO.add_event_callback(13, gpio_callback)
-# GPIO.add_event_callback(18, gpio_callback)
-# GPIO.add_event_callback(22, gpio_callback)
-# GPIO.add_event_callback(11, gpio_callback)
+for gpio_id in keymap:
+	RPIO.setup(gpio_id, RPIO.IN)
+	RPIO.add_interrupt_callback(gpio_id, gpio_callback, edge='rising', debounce_timeout_ms=200)
 
 RPIO.wait_for_interrupts()
 
