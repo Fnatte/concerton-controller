@@ -47,5 +47,6 @@ GPIO.add_event_callback(18, gpio_callback)
 GPIO.add_event_callback(22, gpio_callback)
 GPIO.add_event_callback(11, gpio_callback)
 
-GPIO.wait_for_interrupts()
+raw_input("Press enter to stop.")
+
 GPIO.cleanup()
