@@ -21,7 +21,7 @@ def gpio_callback(channel):
 	elif(channel == 13):
 		client.next()
 	elif(channel == 18):
-		client.previous()
+			client.previous()
 
 GPIO.setmode(GPIO.BOARD)
 
@@ -32,12 +32,12 @@ GPIO.setup(18, GPIO.IN) # Switch 4
 GPIO.setup(22, GPIO.IN) # Switch 5
 GPIO.setup(11, GPIO.IN) # Switch 6
 
-GPIO.add_event_detect(16, GPIO.RISING, callback=gpio_callback, bouncetime=100)
-GPIO.add_event_detect(15, GPIO.RISING, callback=gpio_callback, bouncetime=100)
-GPIO.add_event_detect(13, GPIO.RISING, callback=gpio_callback, bouncetime=100)
-GPIO.add_event_detect(18, GPIO.RISING, callback=gpio_callback, bouncetime=100)
-GPIO.add_event_detect(22, GPIO.RISING, callback=gpio_callback, bouncetime=100)
-GPIO.add_event_detect(11, GPIO.RISING, callback=gpio_callback, bouncetime=100)
+GPIO.add_event_detect(16, GPIO.RISING, callback=gpio_callback, bouncetime=500)
+GPIO.add_event_detect(15, GPIO.RISING, callback=gpio_callback, bouncetime=500)
+GPIO.add_event_detect(13, GPIO.RISING, callback=gpio_callback, bouncetime=500)
+GPIO.add_event_detect(18, GPIO.RISING, callback=gpio_callback, bouncetime=500)
+GPIO.add_event_detect(22, GPIO.RISING, callback=gpio_callback, bouncetime=500)
+GPIO.add_event_detect(11, GPIO.RISING, callback=gpio_callback, bouncetime=500)
 
 # GPIO.add_event_callback(16, gpio_callback)
 # GPIO.add_event_callback(15, gpio_callback)
