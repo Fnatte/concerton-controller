@@ -14,10 +14,14 @@ print("Connected to " + ip_addr + ":" + str(port))
 
 def gpio_callback(channel):
 	print("Edge detected on channel %s."%channel)
-	if(channel == 16) client.play()
-	elif(channel == 15) client.pause()
-	elif(channel == 13) client.next()
-	elif(channel == 18) client.previous()
+	if(channel == 16):
+		client.play()
+	elif(channel == 15):
+		client.pause()
+	elif(channel == 13):
+		client.next()
+	elif(channel == 18):
+		client.previous()
 
 GPIO.setmode(GPIO.BOARD)
 
