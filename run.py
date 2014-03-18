@@ -26,10 +26,9 @@ keymap = {
 
 
 def connect():
-
+	print("Connecting.. ")
 	client.connect(ip_addr, port)
-		
-
+	print("Connected to " + ip_addr + ":" + str(port))
 
 def disconnect():
 	global client
@@ -49,6 +48,9 @@ def disconnect():
 
 def trySendAction(action, retry=True):
 	try:
+
+		print "Sending: " + action
+
 		if(action == "play"):
 			client.play()
 		elif(action == "pause"):
@@ -58,9 +60,12 @@ def trySendAction(action, retry=True):
 		elif(action == "previous"):
 			client.previous()
 		elif(action == "makeout"):
-			client.clear();
-			client.add('spotify:user:niklass0n:playlist:5sWsYBtvkFAMTsNRnxDkmu');
-			client.play();
+			client.load('H\xc3\xa5ngellistan by niklass0n')
+			client.play(0)
+
+		print "Done"
+		return True
+
 	except (MPDError, IOError):
 		if retry:
 			disconnect()
@@ -85,15 +90,12 @@ def gpio_callback(channel, val):
 	tries = 0
 	while tries < 3:
 		if trySendAction(action):
-			pass
+			break
 		else:
 			tries += 1
 			
 
-# Connect
-print("Connecting.. ")
 connect()
-print("Connected to " + ip_addr + ":" + str(port))
 
 # Setup gpio mapping
 for gpio_id in keymap:
