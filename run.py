@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -
+
 from mpd import MPDClient, MPDError
 from select import select
 from time import sleep
@@ -17,7 +19,7 @@ keymap = {
 	22: 'pause',
 	27: 'next',
 	24: 'prev',
-	25: 'unmapped1',
+	25: 'makeout',
 	17: 'none' 
 }
 
@@ -55,6 +57,10 @@ def trySendAction(action, retry=True):
 			client.next()
 		elif(action == "previous"):
 			client.previous()
+		elif(action == "makeout"):
+			client.clear();
+			client.add('spotify:user:niklass0n:playlist:5sWsYBtvkFAMTsNRnxDkmu');
+			client.play();
 	except (MPDError, IOError):
 		if retry:
 			disconnect()
