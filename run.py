@@ -60,8 +60,11 @@ def trySendAction(action, retry=True):
 		elif(action == "previous"):
 			client.previous()
 		elif(action == "makeout"):
+			client.command_list_ok_begin()
+			client.clear()
 			client.load('H\xc3\xa5ngellistan by niklass0n')
 			client.play(0)
+			client.command_list_end()
 
 		print "Done"
 		return True
